@@ -38,7 +38,7 @@ class Employee(models.Model):
                             )
 
     admission_date = models.DateField(
-                            verbose_name = _(u'Data de Adminissão'),
+                            verbose_name = _(u'Data de Admissão'),
     )
 
     is_administrative = models.BooleanField(
@@ -89,8 +89,8 @@ class Item(models.Model):
 
 
     class Meta:
-        verbose_name = _(u'Item')
-        verbose_name_plural = _(u'Items')
+        verbose_name = _(u'Item da Dispensa')
+        verbose_name_plural = _(u'Itens da Dispensa')
 
     def __unicode__(self):
         return self.name
@@ -122,3 +122,85 @@ class Supplier(models.Model):
 
     def __unicode__(self):
         return self.name
+
+########################################################################################
+
+class Order(models.Model):
+
+    invoice_number = models.IntegerField(
+                                        verbose_name = _(u'Número do Pedido')
+                                        )
+
+    date = models.DateTimeField(
+                            verbose_name = _(u'Data do pedido'),
+                            )
+
+    employee = models.ForeignKey(Employee, verbose_name=_(u'Funcionário'))
+
+
+    class Meta:
+        verbose_name = _(u'Pedido')
+        verbose_name_plural = _(u'Pedidos')
+
+    def __unicode__(self):
+        return str(self.invoice_number)
+
+########################################################################################
+
+class MenuItem(models.Model):
+
+    name = models.CharField(
+                        max_length=50,
+                        verbose_name = _(u'Nome'),
+                           )
+
+    description = models.CharField(
+                        max_length=300,
+                        verbose_name = _(u'Descrição'),
+                           )
+
+    price = models.DecimalField(
+                            max_digits=5,
+                            decimal_places=2,
+                            verbose_name = _(u'Preço'),
+                            )
+
+    class Meta:
+        verbose_name = _(u'Item do Cardápio')
+        verbose_name_plural = _(u'Itens do Cardápio')
+
+    def __unicode__(self):
+        return self.name
+
+########################################################################################
+
+
+class OrderMenuItem(models.Model):
+
+    order = models.ForeignKey(Order, verbose_name=_(u'Pedido'))
+
+    menu_item = models.ForeignKey(MenuItem, verbose_name=_(u'Item do Cardápio'))
+
+    quantity = models.DecimalField(
+                            max_digits=5,
+                            decimal_places=2,
+                            verbose_name = _(u'Quantidade'),
+                            )
+
+    unit_price = models.DecimalField(
+                            max_digits=5,
+                            decimal_places=2,
+                            verbose_name = _(u'Preço Unitário'),
+                            )
+
+    class Meta:
+        verbose_name = _(u'Item de Pedido')
+        verbose_name_plural = _(u'Itens de Pedido')
+
+    def __unicode__(self):
+        return str(self.order.invoice_number) + " | " + self.menu_item.name
+
+
+
+
+########################################################################################
