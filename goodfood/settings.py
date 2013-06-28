@@ -1,4 +1,6 @@
 # Django settings for goodfood project.
+import os
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -109,7 +111,9 @@ ROOT_URLCONF = 'goodfood.urls'
 WSGI_APPLICATION = 'goodfood.wsgi.application'
 
 import os
-TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
+TEMPLATE_DIRS = (
+                os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),
+                )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -154,3 +158,4 @@ LOGGING = {
         },
     }
 }
+

@@ -1,0 +1,12 @@
+{% extends "admin/change_form.html" %}
+{% load staticfiles %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {%  block js %}
+        <script type="text/javascript" src="{% static 'js/jquery-1.10.1.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/change-form.js' %}"></script>
+    {%  endblock js %}
+{% endblock extrahead %}
+
+{% load i18n admin_urls %}
