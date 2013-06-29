@@ -3,7 +3,9 @@
 from django.contrib import admin
 import locale
 
-from restaurantsystem.models import Employee, Item, Supplier, Order, MenuItem, OrderMenuItem
+from restaurantsystem.models import Employee, Item, Supplier, \
+                                    Order, Product, OrderProduct, \
+                                    Purchase, PurchaseItem
 
 class EmployeeAdmin(admin.ModelAdmin):
     list_display = ('name', 'address', 'gender', 'salary', 'admission_date', 'phone_number', 'is_administrative')
@@ -38,24 +40,24 @@ class OrderAdmin(admin.ModelAdmin):
 
     get_employee_name.short_description = (u'Funcionário')
 
-class MenuItemAdmin(admin.ModelAdmin):
+class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'price')
     search_fields = list_display
     list_filter = list_display
 
-class OrderMenuItemAdmin(admin.ModelAdmin):
+class OrderProductAdmin(admin.ModelAdmin):
 
     locale.setlocale(locale.LC_ALL, 'ptb')
 
-    list_display = ('get_order_invoice', 'get_menu_item_name', 'quantity', 'get_unit_price', 'get_partial')
+    list_display = ('get_order_invoice', 'get_product_name', 'quantity', 'get_unit_price', 'get_partial')
     search_fields = list_display
-    list_filter = ('order__invoice_number', 'menu_item__name', 'quantity', 'unit_price')
+    list_filter = ('order__invoice_number', 'product__name', 'quantity', 'unit_price')
 
     def get_order_invoice(self, order_menu_item):
         return order_menu_item.order.invoice_number
 
-    def get_menu_item_name(self, order_menu_item):
-        return order_menu_item.menu_item.name
+    def get_product_name(self, order_menu_item):
+        return order_menu_item.product.name
 
     def get_unit_price(self, order_menu_item):
         return locale.currency(order_menu_item.unit_price)
@@ -64,7 +66,42 @@ class OrderMenuItemAdmin(admin.ModelAdmin):
         return locale.currency(order_menu_item.quantity * order_menu_item.unit_price)
 
     get_order_invoice.short_description = (u'Número do Pedido')
-    get_menu_item_name.short_description = (u'Item do Menu')
+    get_product_name.short_description = (u'Produto')
+    get_partial.short_description = (u'Subtotal')
+    get_unit_price.short_description = (u'Preço Unitário')
+
+class PurchaseAdmin(admin.ModelAdmin):
+    list_display = ('invoice_number', 'date', 'get_employee_name')
+    search_fields = list_display
+    list_filter = ('invoice_number', 'date', 'employee__name')
+
+    def get_employee_name(self, order):
+        return order.employee.name
+
+    get_employee_name.short_description = (u'Funcionário')
+
+class PurchaseItemAdmin(admin.ModelAdmin):
+
+    locale.setlocale(locale.LC_ALL, 'ptb')
+
+    list_display = ('get_purchase_invoice', 'get_product_name', 'quantity', 'get_unit_price', 'get_partial')
+    search_fields = list_display
+    list_filter = ('purchase__invoice_number', 'item__name', 'quantity', 'unit_price')
+
+    def get_purchase_invoice(self, purchase_item):
+        return purchase_item.purchase.invoice_number
+
+    def get_product_name(self, purchase_item):
+        return purchase_item.item.name
+
+    def get_unit_price(self, purchase_item):
+        return locale.currency(purchase_item.unit_price)
+
+    def get_partial(self, purchase_item):
+        return locale.currency(purchase_item.quantity * purchase_item.unit_price)
+
+    get_purchase_invoice.short_description = (u'Número da Compra')
+    get_product_name.short_description = (u'Produto')
     get_partial.short_description = (u'Subtotal')
     get_unit_price.short_description = (u'Preço Unitário')
 
@@ -72,5 +109,7 @@ admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Supplier, SupplierAdmin)
 admin.site.register(Order, OrderAdmin)
-admin.site.register(MenuItem, MenuItemAdmin)
-admin.site.register(OrderMenuItem, OrderMenuItemAdmin)
+admin.site.register(Product, ProductAdmin)
+admin.site.register(OrderProduct, OrderProductAdmin)
+admin.site.register(Purchase, PurchaseAdmin)
+admin.site.register(PurchaseItem, PurchaseItemAdmin)

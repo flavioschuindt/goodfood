@@ -1,8 +1,8 @@
 
 $(document).ready(function(){
 
-    $('#id_menu_item').change(function(){
-        val = $('#id_menu_item').find(":selected").attr('value');
+    $('#id_product').change(function(){
+        val = $('#id_product').find(":selected").attr('value');
         if (val != "")
         {
             $.ajax({
