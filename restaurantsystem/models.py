@@ -32,8 +32,8 @@ class Employee(models.Model):
                             verbose_name = _(u'Endereço'),
                             )
 
-    phone_number = models.CharField(
-                            max_length=9,
+    phone_number = models.IntegerField(
+                            max_length=11,
                             verbose_name = _(u'Telefone'),
                             )
 
@@ -109,7 +109,7 @@ class Supplier(models.Model):
                             verbose_name = _(u'Endereço'),
                             )
 
-    phone_number = models.CharField(
+    phone_number = models.IntegerField(
                             max_length=9,
                             verbose_name = _(u'Telefone'),
                             )
@@ -194,8 +194,8 @@ class OrderProduct(models.Model):
                             )
 
     class Meta:
-        verbose_name = _(u'Pedidos (Item)')
-        verbose_name_plural = _(u'Pedidos (Itens)')
+        verbose_name = _(u'Pedido (Produtos)')
+        verbose_name_plural = _(u'Pedidos (Produtos)')
 
     def __unicode__(self):
         return str(self.order.invoice_number) + " | " + self.product.name
@@ -232,6 +232,8 @@ class PurchaseItem(models.Model):
 
     item = models.ForeignKey(Item, verbose_name=_(u'Item'))
 
+    supplier = models.ForeignKey(Supplier, verbose_name=_(u'Fornecedor'))
+
     quantity = models.DecimalField(
                             max_digits=5,
                             decimal_places=2,
@@ -247,6 +249,12 @@ class PurchaseItem(models.Model):
     class Meta:
         verbose_name = _(u'Compras (Item)')
         verbose_name_plural = _(u'Compras (Itens)')
+
+    def save(self, *args, **kwargs):
+        super(PurchaseItem, self).save(*args, **kwargs)
+        item = Item.objects.get(id=self.item.id)
+        item.quantity += self.quantity
+        item.save()
 
     def __unicode__(self):
         return str(self.purchase.invoice_number) + " | " + self.item.name

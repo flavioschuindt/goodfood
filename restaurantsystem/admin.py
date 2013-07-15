@@ -105,6 +105,7 @@ class PurchaseItemAdmin(admin.ModelAdmin):
     get_partial.short_description = (u'Subtotal')
     get_unit_price.short_description = (u'Preço Unitário')
 
+
 admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Supplier, SupplierAdmin)
