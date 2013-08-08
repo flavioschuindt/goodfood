@@ -32,7 +32,7 @@ class Employee(models.Model):
                             verbose_name = _(u'Endereço'),
                             )
 
-    phone_number = models.IntegerField(
+    phone_number = models.CharField(
                             max_length=11,
                             verbose_name = _(u'Telefone'),
                             )
@@ -109,8 +109,8 @@ class Supplier(models.Model):
                             verbose_name = _(u'Endereço'),
                             )
 
-    phone_number = models.IntegerField(
-                            max_length=9,
+    phone_number = models.CharField(
+                            max_length=11,
                             verbose_name = _(u'Telefone'),
                             )
 
